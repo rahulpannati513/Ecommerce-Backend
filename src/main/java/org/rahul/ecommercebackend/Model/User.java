@@ -38,6 +38,8 @@ public class User {
     @JsonIgnore
     private List<Rating> ratings;
 
+
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
     private  List<Review> reviews = new ArrayList<>();

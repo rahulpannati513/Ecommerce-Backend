@@ -106,12 +106,16 @@ public class ProductServiceImplementation implements ProductService{
     }
 
     @Override
-    public List<Product> findProductByCategory(String category) throws ProductException {
-        return List.of();
+    public List<Product> findAllProducts() throws ProductException {
+
+
+        return productRepository.findAll();
     }
 
+
+
     @Override
-    public Page<Product> findAllProducts(
+    public Page<Product> findAllProductsByCategory(
             String category, List<String> colors, List<String> sizes, Integer minPrice,
             Integer maxPrice, Integer minDiscount, String sort, String stock,
             Integer pageNumber, Integer pageSize) {

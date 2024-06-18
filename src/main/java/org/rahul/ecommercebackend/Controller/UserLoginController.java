@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/user")
 public class UserLoginController {
@@ -17,8 +21,10 @@ public class UserLoginController {
     private UserService userService;
 
     @GetMapping("/hello")
-    public String hello() {
-    return "Hello";
+    public ResponseEntity<Map<String, String>> hello() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Hello");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/addAllProducts")

@@ -2,8 +2,11 @@ package org.rahul.ecommercebackend.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
+@Data
 public class PaymentDetails {
 
     private  String paymentMethod;
