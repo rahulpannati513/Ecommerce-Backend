@@ -38,6 +38,7 @@ public class AuthController {
     private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+
     private final JwtFilter jwtFilter;
     @Autowired
     private HttpSecurity httpSecurity;

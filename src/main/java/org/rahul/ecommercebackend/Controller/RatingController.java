@@ -30,7 +30,6 @@ public class RatingController {
         User user = userService.findUserProfileByJwt(jwt);
         Rating rating = ratingService.createRating(req, user);
         return  new ResponseEntity<>(rating, HttpStatus.CREATED);
-
     }
 
     @GetMapping("/product/{productId}")

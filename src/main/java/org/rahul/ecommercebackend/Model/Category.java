@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class CategoryProduct {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -16,14 +16,14 @@ public class CategoryProduct {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_category_id")
-    private  CategoryProduct parentCategory;
+    private  Category parentCategory;
 
     private int level;
 
-    public CategoryProduct() {
+    public Category() {
     }
 
-    public CategoryProduct(Long id, String name, CategoryProduct parentCategory, int level) {
+    public Category(Long id, String name, Category parentCategory, int level) {
 
         this.id = id;
         this.name = name;
@@ -47,11 +47,11 @@ public class CategoryProduct {
         this.name = name;
     }
 
-    public CategoryProduct getParentCategory() {
+    public Category getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(CategoryProduct parentCategory) {
+    public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
 

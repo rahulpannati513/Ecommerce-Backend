@@ -26,7 +26,8 @@ public class OrderController {
     @PostMapping("/")
     public ResponseEntity<Order> createOrder(@RequestBody Address shippingAddress,
                                              @RequestHeader("Authorization") String jwt)throws UserException {
-        User user = userService.findUserProfileByJwt(jwt);
+        String token = jwt.startsWith("Bearer ") ? jwt.substring(7) : jwt;
+        User user = userService.findUserProfileByJwt(token);
         Order orderCreated = orderService.createOrder(user, shippingAddress);
 
 
@@ -35,7 +36,8 @@ public class OrderController {
 
     @GetMapping("/user")
     public ResponseEntity<List<Order>>  userOrderHistory(@RequestHeader("Authorization") String jwt) throws UserException {
-        User user = userService.findUserProfileByJwt(jwt);
+        String token = jwt.startsWith("Bearer ") ? jwt.substring(7) : jwt;
+        User user = userService.findUserProfileByJwt(token);
         List<Order> orderHistory = orderService.usersOrderHistory(user.getId());
 
         return new ResponseEntity<>(orderHistory,HttpStatus.CREATED);
@@ -44,7 +46,8 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> findOrderById(@PathVariable("orderId") Long orderId,
                                                @RequestHeader("Authorization") String jwt) throws UserException, OrderException {
-        User user = userService.findUserProfileByJwt(jwt);
+        String token = jwt.startsWith("Bearer ") ? jwt.substring(7) : jwt;
+        User user = userService.findUserProfileByJwt(token);
         Order order = orderService.findOrderById(orderId);
 
         return  new ResponseEntity<>(order,HttpStatus.ACCEPTED);

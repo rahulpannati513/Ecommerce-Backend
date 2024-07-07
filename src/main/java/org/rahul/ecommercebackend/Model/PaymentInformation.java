@@ -1,11 +1,12 @@
 package org.rahul.ecommercebackend.Model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 
-
+@Embeddable
 public class PaymentInformation {
 
     @Column(name = "cardholder_name")

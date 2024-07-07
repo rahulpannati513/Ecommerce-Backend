@@ -30,6 +30,7 @@ public class ProductController {
 
     @GetMapping("/products/id/{productId}")
     public ResponseEntity<Product> findProductByIdHandler(@PathVariable Long productId) throws ProductException {
+
         Product res = productService.findProductById(productId);
         return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
     }

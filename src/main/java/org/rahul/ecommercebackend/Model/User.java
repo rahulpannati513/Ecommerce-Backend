@@ -29,7 +29,6 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private  List<Address>  address ;
 
-    @Embedded
     @ElementCollection
     @CollectionTable(name="payment_information",joinColumns = @JoinColumn(name = "user_id"))
     private List<PaymentInformation> paymentInformation;
@@ -145,4 +144,5 @@ public class User {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
 }

@@ -1,9 +1,11 @@
 package org.rahul.ecommercebackend.Service;
 
 import org.rahul.ecommercebackend.Exception.ProductException;
-import org.rahul.ecommercebackend.Model.CategoryProduct;
+import org.rahul.ecommercebackend.Model.Category;
+
 import org.rahul.ecommercebackend.Model.Product;
-import org.rahul.ecommercebackend.Model.Productsize;
+
+import org.rahul.ecommercebackend.Model.ProductSize;
 import org.rahul.ecommercebackend.Repository.CategoryRepository;
 import org.rahul.ecommercebackend.Repository.ProductRepository;
 import org.rahul.ecommercebackend.Request.CreateProductRequest;
@@ -13,10 +15,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,31 +33,36 @@ public class ProductServiceImplementation implements ProductService{
         private CategoryRepository categoryRepository;
         @Autowired
         private UserService userService;
-
-
+        @Transactional
+    public Product createOrUpdateProduct(Product product, List<ProductSize> sizes) {
+        Set<ProductSize> productSizes = new HashSet<>(sizes);
+        product.setProductSize(productSizes);
+        return productRepository.save(product);
+    }
+    @Transactional
     @Override
     public Product createProduct(CreateProductRequest request) {
-        CategoryProduct topLevelRequest = categoryRepository.findByName(request.getTopLevelCategory());
+        Category topLevelRequest = categoryRepository.findByName(request.getTopLevelCategory());
         if(topLevelRequest == null){
-            CategoryProduct topLevelCategory = new CategoryProduct();
+            Category topLevelCategory = new Category();
             topLevelCategory.setName(request.getTopLevelCategory());
             topLevelCategory.setLevel(1);
 
             topLevelRequest = categoryRepository.save(topLevelCategory);
 
         }
-        CategoryProduct secondLevelRequest = categoryRepository.findByNameAndParent(request.getSecondLevelCategory(),topLevelRequest.getName());
+        Category secondLevelRequest = categoryRepository.findByNameAndParent(request.getSecondLevelCategory(),topLevelRequest.getName());
         if(secondLevelRequest == null){
-            CategoryProduct secondLevelCategory = new CategoryProduct();
+            Category secondLevelCategory = new Category();
             secondLevelCategory.setName(request.getSecondLevelCategory());
             secondLevelCategory.setParentCategory(topLevelRequest);
             secondLevelCategory.setLevel(2);
             secondLevelRequest = categoryRepository.save(secondLevelCategory);;
         }
 
-        CategoryProduct thirdLevelRequest = categoryRepository.findByNameAndParent(request.getThirdLevelCategory(),secondLevelRequest.getName());
+        Category thirdLevelRequest = categoryRepository.findByNameAndParent(request.getThirdLevelCategory(),secondLevelRequest.getName());
         if(thirdLevelRequest == null){
-            CategoryProduct thirdLevelCategory = new CategoryProduct();
+            Category thirdLevelCategory = new Category();
             thirdLevelCategory.setName(request.getThirdLevelCategory());
             thirdLevelCategory.setParentCategory(secondLevelRequest);
             thirdLevelCategory.setLevel(3);
@@ -68,11 +78,15 @@ public class ProductServiceImplementation implements ProductService{
         product.setBrand(request.getBrand());
         product.setPrice(request.getPrice());
         product.setDiscountedPrice(request.getDiscountedPrice());
-        product.setDiscountPercent(request.getDiscountedPercentage());
+        product.setDiscountPercent(request.getDiscountedPercent());
         product.setQuantity(request.getQuantity());
         product.setCategory(thirdLevelRequest);
-        product.setCreatedAt(LocalDateTime.now());
-        product.setProductSize(request.getSize());
+        product.setCreatedAt(LocalDateTime.now()) ;
+       request.getSize().forEach(size -> {
+            ProductSize productSize = new ProductSize(size.getName(), size.getQuantity());
+            productSize.setProduct(product);
+            product.getProductSize().add(productSize);
+        });
 
         return productRepository.save(product);
     }
@@ -84,6 +98,7 @@ public class ProductServiceImplementation implements ProductService{
         return "Product Deleted Successfully";
     }
 
+    @Transactional
     @Override
     public Product updateProduct(Long productId, Product productRequest) throws ProductException {
 
