@@ -26,8 +26,9 @@ public class User {
 
     private  String mobile;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private  List<Address>  address ;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> address = new ArrayList<>();
+
 
     @ElementCollection
     @CollectionTable(name="payment_information",joinColumns = @JoinColumn(name = "user_id"))

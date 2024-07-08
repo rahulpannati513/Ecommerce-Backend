@@ -19,18 +19,22 @@ import java.util.Optional;
 @Service
 public class OrderServiceImplementation implements OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private CartService cartService;
-    @Autowired
-    private AddressRepository addressRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private OrderItemService orderItemService;
-    @Autowired
-    private OrderItemRepository orderItemRepository;
+    private final OrderRepository orderRepository;
+    private final CartService cartService;
+    private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
+    private final OrderItemService orderItemService;
+    private final OrderItemRepository orderItemRepository;
+
+    public OrderServiceImplementation(OrderRepository orderRepository, CartService cartService, AddressRepository addressRepository, UserRepository userRepository, OrderItemService orderItemService, OrderItemRepository orderItemRepository) {
+        this.orderRepository = orderRepository;
+        this.cartService = cartService;
+        this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
+        this.orderItemService = orderItemService;
+        this.orderItemRepository = orderItemRepository;
+    }
+
 
 
 
@@ -42,7 +46,7 @@ public class OrderServiceImplementation implements OrderService {
         user.getAddress().add(address);
         userRepository.save(user);
 
-        Cart cart = cartService.findUserCart(user.getId());
+        Cart cart=cartService.findUserCart(user.getId());
         List<OrderItem> orderItems=new ArrayList<>();
 
         for(CartItem item: cart.getCartItems()) {
@@ -84,6 +88,7 @@ public class OrderServiceImplementation implements OrderService {
             orderItemRepository.save(item);
         }
         return savedOrder;
+
     }
 
     @Override

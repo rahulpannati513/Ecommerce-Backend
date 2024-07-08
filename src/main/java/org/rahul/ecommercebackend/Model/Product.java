@@ -1,5 +1,6 @@
 package org.rahul.ecommercebackend.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +37,7 @@ public class Product {
     private String color;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonProperty
+    @JsonManagedReference
     private Set<ProductSize> productSize = new HashSet<>();
 
     private String imageUrl;

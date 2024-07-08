@@ -1,6 +1,6 @@
 package org.rahul.ecommercebackend.Controller;
 
-import jakarta.persistence.Entity;
+
 import org.rahul.ecommercebackend.Exception.ProductException;
 import org.rahul.ecommercebackend.Model.Product;
 import org.rahul.ecommercebackend.Request.CreateProductRequest;
@@ -21,7 +21,7 @@ public class AdminProductController {
     private ProductService productService;
 
 
-    @PostMapping("/")
+    @PostMapping("/createProduct")
     public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequest request){
 
         Product product = productService.createProduct(request);
@@ -32,7 +32,7 @@ public class AdminProductController {
     @DeleteMapping("/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) throws ProductException {
 
-        productService.deleteProduct(productId);
+        String response = productService.deleteProduct(productId);
         ApiResponse res = new ApiResponse();
         res.setMessage("Product deleted successfully");
         res.setStatus(true);
@@ -54,7 +54,7 @@ public class AdminProductController {
     }
 
     @PostMapping("/creates")
-    public ResponseEntity<ApiResponse> createMultiipleProduct(@RequestBody CreateProductRequest[] request){
+    public ResponseEntity<ApiResponse> createMultipleProduct(@RequestBody CreateProductRequest[] request){
 
         for(CreateProductRequest product : request){
             productService.createProduct(product);

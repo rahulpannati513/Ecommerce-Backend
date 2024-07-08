@@ -23,7 +23,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/")
+    @PostMapping("/createOrder")
     public ResponseEntity<Order> createOrder(@RequestBody Address shippingAddress,
                                              @RequestHeader("Authorization") String jwt)throws UserException {
         String token = jwt.startsWith("Bearer ") ? jwt.substring(7) : jwt;

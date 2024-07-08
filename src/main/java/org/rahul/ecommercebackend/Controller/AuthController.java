@@ -33,36 +33,33 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
 
     private final CustomUserServiceImplementation customUserServiceImplementation;
-    private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder(12);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-
     private final JwtFilter jwtFilter;
-    @Autowired
-    private HttpSecurity httpSecurity;
+    private final HttpSecurity httpSecurity;
+    private final UserServiceImplementation userService;
+    private final UserServiceImplementation userServiceImplementation;
+    private final UserRepository userRepo;
+    private final AuthenticationManager authenticationManager;
+
+
 
     @Autowired
-    private UserServiceImplementation userService;
-    @Autowired
-    private UserServiceImplementation userServiceImplementation;
-
-    @Autowired
-    public AuthController(CustomUserServiceImplementation customUserServiceImplementation, JwtService jwtService, UserDetailsService userDetailsService, JwtFilter jwtFilter) {
+    public AuthController(CustomUserServiceImplementation customUserServiceImplementation, JwtService jwtService, UserDetailsService userDetailsService, JwtFilter jwtFilter, HttpSecurity httpSecurity, UserServiceImplementation userService, UserServiceImplementation userServiceImplementation, UserRepository userRepo, AuthenticationManager authenticationManager) {
         this.customUserServiceImplementation = customUserServiceImplementation;
 
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.jwtFilter = jwtFilter;
+        this.httpSecurity = httpSecurity;
+        this.userService = userService;
+        this.userServiceImplementation = userServiceImplementation;
+        this.userRepo = userRepo;
+        this.authenticationManager = authenticationManager;
     }
-
-    @Autowired
-    private UserRepository userRepo;
-
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
 
     @GetMapping("/hello")

@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cart")
 public class CartController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CartService cartService;
+    private final UserService userService;
+    private final CartService cartService;
 
-    @GetMapping("/")
+    public CartController(UserService userService, CartService cartService) {
+        this.userService = userService;
+        this.cartService = cartService;
+    }
+
+    @GetMapping("/findCart")
     public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt) throws UserException {
         String token = jwt.startsWith("Bearer ") ? jwt.substring(7) : jwt;
         User user = userService.findUserProfileByJwt(token);
@@ -31,15 +34,15 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
-    @PutMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse> addItemToCart(@RequestBody AddItemRequest request,
                                                      @RequestHeader("Authorization") String jwt) throws UserException , ProductException {
         String token = jwt.startsWith("Bearer ") ? jwt.substring(7) : jwt;
         User user = userService.findUserProfileByJwt(token);
-         cartService.addCartItem(user.getId(), request);
+        String cart = cartService.addCartItem(user.getId(), request);
 
         ApiResponse res = new ApiResponse();
-        res.setMessage("Item added to cart successfully");
+        res.setMessage(cart);
         res.setStatus(true);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

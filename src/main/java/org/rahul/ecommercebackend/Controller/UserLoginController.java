@@ -20,17 +20,6 @@ public class UserLoginController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/hello")
-    public ResponseEntity<Map<String, String>> hello() {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Hello");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping("/addAllProducts")
-    public String addAllProducts(@RequestParam String name) {
-    return "All Products Added"+name;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {

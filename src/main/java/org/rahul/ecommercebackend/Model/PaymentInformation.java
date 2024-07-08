@@ -1,24 +1,30 @@
 package org.rahul.ecommercebackend.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 @Embeddable
+@Setter
+@Getter
 public class PaymentInformation {
 
-    @Column(name = "cardholder_name")
-    private String cardholderName;
 
-    @Column(name = "card_number")
-    private  String cardName;
+    private String cardType;;
 
-    @Column(name = "expiration_date")
-    private LocalDateTime expirtionDate;
+    private  String cardholderName;
 
-    @Column(name = "cvv")
-    private  String cvv;
+
+    private String cardNumber; // Corrected field name
+
+    @JsonFormat(pattern = "MM/yy")
+    private YearMonth expiryDate; // Corrected field name and typo
+
+    private String cvv;
 
 }
